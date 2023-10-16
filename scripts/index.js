@@ -1,15 +1,5 @@
 const cardList = document.querySelector(".places__list");
 
-const editProfileButton = document.querySelector(".profile__edit-button");
-const newCardButton = document.querySelector(".profile__add-button");
-const cardImageButtons = Array.from(document.querySelectorAll(".card__image"));
-const closePopupButtons = Array.from(
-  document.querySelectorAll(".popup__close")
-);
-const cardLikeButtons = Array.from(
-  document.querySelectorAll(".card__like-button")
-);
-
 function getCard(cardInfo, deleteCard) {
   const cardTemplate = document.querySelector("#card-template").content;
 
@@ -48,6 +38,11 @@ function editProfile(event) {
   newProfileInfoForm.querySelector(".popup__input_type_description").value;
 }
 
+initialCards.forEach(function (card) {
+  cardList.append(getCard(card, deleteCard));
+});
+
+const editProfileButton = document.querySelector(".profile__edit-button");
 editProfileButton.addEventListener("click", function (event) {
   const newProfilePopup = document.querySelector(".popup_type_edit");
   newProfilePopup.classList.add("popup_is-animated", "popup_is-opened");
@@ -56,6 +51,7 @@ editProfileButton.addEventListener("click", function (event) {
   newProfileSaveButton.addEventListener("click", editProfile);
 });
 
+const newCardButton = document.querySelector(".profile__add-button");
 newCardButton.addEventListener("click", function (event) {
   const newCardPopup = document.querySelector(".popup_type_new-card");
   newCardPopup.classList.add("popup_is-animated", "popup_is-opened");
@@ -64,6 +60,7 @@ newCardButton.addEventListener("click", function (event) {
   newCardSaveButton.addEventListener("click", addNewCard);
 });
 
+const cardImageButtons = Array.from(document.querySelectorAll(".card__image"));
 cardImageButtons.forEach(function (btn) {
   btn.addEventListener("click", function (event) {
     const popupImage = document.querySelector(".popup_type_image");
@@ -72,18 +69,20 @@ cardImageButtons.forEach(function (btn) {
   });
 });
 
+const closePopupButtons = Array.from(
+  document.querySelectorAll(".popup__close")
+);
 closePopupButtons.forEach(function (btn) {
   btn.addEventListener("click", function (event) {
     event.target.closest(".popup").classList.remove("popup_is-opened");
   });
 });
 
+const cardLikeButtons = Array.from(
+  document.querySelectorAll(".card__like-button")
+);
 cardLikeButtons.forEach(function (btn) {
   btn.addEventListener("click", function (event) {
     event.target.classList.add("card__like-button_is-active");
   });
-});
-
-initialCards.forEach(function (card) {
-  cardList.append(getCard(card, deleteCard));
 });
