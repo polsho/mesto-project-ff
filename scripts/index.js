@@ -26,26 +26,46 @@ initialCards.forEach(function (card) {
 
 const editProfileButton = document.querySelector(".profile__edit-button");
 editProfileButton.addEventListener("click", function (event) {
-  document
-    .querySelector(".popup_type_edit")
-    .classList.add("popup_is-animated", "popup_is-opened");
+  const newProfilePopup = document.querySelector(".popup_type_edit");
+  newProfilePopup.classList.add("popup_is-animated", "popup_is-opened");
+
+  const newProfileSaveButton = newProfilePopup.querySelector(".popup__button");
+  newProfileSaveButton.addEventListener("click", editProfile);
 });
+
+function editProfile(event) {
+  const newProfileInfoForm = event.target.closest(".popup__form");
+  document.querySelector(".profile__title").textContent =
+    newProfileInfoForm.querySelector(".popup__input_type_name").value;
+  document.querySelector(".profile__description").textContent =
+    newProfileInfoForm.querySelector(".popup__input_type_description").value;
+}
 
 const newCardButton = document.querySelector(".profile__add-button");
 newCardButton.addEventListener("click", function (event) {
-  document
-    .querySelector(".popup_type_new-card")
-    .classList.add("popup_is-animated", "popup_is-opened");
+  const newCardPopup = document.querySelector(".popup_type_new-card");
+  newCardPopup.classList.add("popup_is-animated", "popup_is-opened");
+
+  const newCardSaveButton = newCardPopup.querySelector(".popup__button");
+  newCardSaveButton.addEventListener("click", addNewCard);
 });
 
-const cardImageButtons = Array.from(
-  document.querySelectorAll(".card__image")
-);
+function addNewCard(event) {
+  const newCardInfoForm = event.target.closest(".popup__form");
+  const newCard = {};
+  newCard.name = newCardInfoForm.querySelector(
+    ".popup__input_type_card-name"
+  ).value;
+  newCard.link = newCardInfoForm.querySelector(".popup__input_type_url").value;
+  initialCards.push(newCard);
+}
+
+const cardImageButtons = Array.from(document.querySelectorAll(".card__image"));
 cardImageButtons.forEach(function (btn) {
   btn.addEventListener("click", function (event) {
     const popupImage = document.querySelector(".popup_type_image");
-    popupImage.classList.add("popup_is-opened");
-    popupImage.querySelector('.popup__image').src = btn.src;
+    popupImage.classList.add("popup_is-animated", "popup_is-opened");
+    popupImage.querySelector(".popup__image").src = btn.src;
   });
 });
 
