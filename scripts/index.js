@@ -37,7 +37,7 @@ function getCard(cardInfo, deleteCard) {
   removeButton.addEventListener("click", deleteCard);
 
   likeButton.addEventListener("click", function (event) {
-    event.target.classList.add("card__like-button_is-active");
+    event.target.classList.toggle("card__like-button_is-active");
   });
 
   cardItemImage.addEventListener("click", function () {
@@ -85,9 +85,7 @@ function openPopup(popupElement) {
 }
 
 function closePopup(event) {
-  event.target
-    .closest(".popup")
-    .classList.remove("popup_is-animated", "popup_is-opened");
+  event.target.closest(".popup").classList.remove("popup_is-opened");
 }
 
 initialCards.forEach(function (card) {
