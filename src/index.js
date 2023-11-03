@@ -1,3 +1,6 @@
+import { initialCards } from './scripts/cards.js';
+import './pages/index.css';
+
 const cardList = document.querySelector(".places__list");
 
 const newCardButton = document.querySelector(".profile__add-button");
@@ -54,7 +57,7 @@ function deleteCard(event) {
   event.target.closest(".card").remove();
 }
 
-function addNewCard() {
+function addNewCard(event) {
   const newCardName = newCardForm.querySelector(".popup__input_type_card-name");
   const newCardSource = newCardForm.querySelector(".popup__input_type_url");
   const newCard = {
@@ -65,6 +68,8 @@ function addNewCard() {
   cardList.prepend(getCard(newCard, deleteCard));
   newCardForm.reset();
   closePopup(newCardPopup);
+
+  return event.preventDefault();
 }
 
 function editProfile() {
