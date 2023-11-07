@@ -1,32 +1,41 @@
-export const initialCards = [
-  {
-    name: "Архыз",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
-    alt: "Вид на горы Архыза.",
-  },
-  {
-    name: "Челябинская область",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg",
-    alt: "Река, окаймленная заснеженными крутыми берегами, в Челябинской области.",
-  },
-  {
-    name: "Иваново",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg",
-    alt: "Вид сверху на ряды серых панельных домов в Иваново.",
-  },
-  {
-    name: "Камчатка",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg",
-    alt: "Равнина с небольшой растительностью и горами вдали на Камчатке.",
-  },
-  {
-    name: "Холмогорский район",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg",
-    alt: "Вид на колею железной дороги, уходящей вдаль, среди леса в Холмогорском районе.",
-  },
-  {
-    name: "Байкал",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
-    alt: "Скалистый берег Байкала.",
-  },
-];
+import {openPopup} from './modal.js';
+
+function getCard(cardInfo, deleteCard, likeCard, openPopupImage) {
+  const cardTemplate = document.querySelector("#card-template").content;
+  const cardItem = cardTemplate.querySelector(".card").cloneNode(true);
+
+  const cardItemImage = cardItem.querySelector(".card__image");
+  const cardItemTitle = cardItem.querySelector(".card__title");
+  const removeButton = cardItem.querySelector(".card__delete-button");
+  const likeButton = cardItem.querySelector(".card__like-button");
+
+  cardItemImage.src = cardInfo.link;
+  cardItemTitle.textContent = cardInfo.name;
+  cardItemImage.alt = cardInfo.alt;
+
+  removeButton.addEventListener("click", deleteCard);
+
+  likeButton.addEventListener("click", likeCard);
+
+  cardItemImage.addEventListener("click", openPopupImage);
+
+  return cardItem;
+}
+
+function deleteCard(event) {
+  event.target.closest(".card").remove();
+}
+
+function likeCard(event) {
+  event.target.classList.toggle("card__like-button_is-active");
+}
+
+function openPopupImage(event) {
+  openPopup(popupImage);
+  console.log(event.target);
+  popupImagePic.src = event.target.src;
+  popupImagePic.alt = event.target.alt;
+  popupImageCap.textContent = event.target.alt; // изменить на cardItemTitle.textContent
+}
+
+export {getCard, deleteCard, likeCard, openPopupImage};
