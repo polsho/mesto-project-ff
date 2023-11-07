@@ -1,5 +1,5 @@
 import { initialCards } from './scripts/initialCards.js';
-import { getCard, deleteCard, likeCard, openPopupImage } from './scripts/cards.js';
+import { getCard, deleteCard, likeCard, opencardImagePopup } from './scripts/cards.js';
 import {openPopup, closePopup} from './scripts/modal.js';
 import './pages/index.css';
 
@@ -19,9 +19,14 @@ newProfileForm.querySelector(
     ".popup__input_type_description"
   ).value = profileDescription.textContent;
 
-const popupImage = document.querySelector(".popup_type_image");
-const popupImagePic = popupImage.querySelector(".popup__image");
-const popupImageCap = popupImage.querySelector(".popup__caption");
+const cardTemplateconfig = {
+  cardTemplateSelector:  "#card-template",
+  cardItemSelector:      ".card",
+  cardItemImageSelector: ".card__image",
+  cardItemTitleSelector: ".card__title",
+  removeButtonSelector:  ".card__delete-button",
+  likeButtonSelector:    ".card__like-button"
+}
 
 const closePopupButtons = Array.from(
   document.querySelectorAll(".popup__close")
@@ -39,7 +44,7 @@ function addNewCard(event) {
     link: newCardSource.value,
     alt: newCardName.value,
   };
-  cardList.prepend(getCard(newCard, deleteCard, likeCard, openPopupImage));
+  cardList.prepend(getCard(newCard, deleteCard, likeCard, opencardImagePopup, cardTemplateconfig));
   newCardForm.reset();
   closePopup(newCardPopup);
 
@@ -56,7 +61,7 @@ function editProfile(event) {
 }
 
 initialCards.forEach(function (card) {
-  cardList.append(getCard(card, deleteCard, likeCard, openPopupImage));
+  cardList.append(getCard(card, deleteCard, likeCard, opencardImagePopup, cardTemplateconfig));
 });
 
 editProfileButton.addEventListener("click", () => openPopup(newProfilePopup));

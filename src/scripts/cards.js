@@ -1,13 +1,13 @@
-import {openPopup} from './modal.js';
+import { openPopup } from "./modal.js";
 
-function getCard(cardInfo, deleteCard, likeCard, openPopupImage) {
-  const cardTemplate = document.querySelector("#card-template").content;
-  const cardItem = cardTemplate.querySelector(".card").cloneNode(true);
+function getCard(cardInfo, deleteCard, likeCard, opencardImagePopup, cardTemplateconfig) {
+  const cardTemplate = document.querySelector(cardTemplateconfig.cardTemplateSelector).content;
+  const cardItem = cardTemplate.querySelector(cardTemplateconfig.cardItemSelector).cloneNode(true);
 
-  const cardItemImage = cardItem.querySelector(".card__image");
-  const cardItemTitle = cardItem.querySelector(".card__title");
-  const removeButton = cardItem.querySelector(".card__delete-button");
-  const likeButton = cardItem.querySelector(".card__like-button");
+  const cardItemImage = cardItem.querySelector(cardTemplateconfig.cardItemImageSelector);
+  const cardItemTitle = cardItem.querySelector(cardTemplateconfig.cardItemTitleSelector);
+  const removeButton = cardItem.querySelector(cardTemplateconfig.removeButtonSelector);
+  const likeButton = cardItem.querySelector(cardTemplateconfig.likeButtonSelector);
 
   cardItemImage.src = cardInfo.link;
   cardItemTitle.textContent = cardInfo.name;
@@ -17,7 +17,7 @@ function getCard(cardInfo, deleteCard, likeCard, openPopupImage) {
 
   likeButton.addEventListener("click", likeCard);
 
-  cardItemImage.addEventListener("click", openPopupImage);
+  opencardImagePopup(cardItemImage, cardItemTitle);
 
   return cardItem;
 }
@@ -30,12 +30,16 @@ function likeCard(event) {
   event.target.classList.toggle("card__like-button_is-active");
 }
 
-function openPopupImage(event) {
-  openPopup(popupImage);
-  console.log(event.target);
-  popupImagePic.src = event.target.src;
-  popupImagePic.alt = event.target.alt;
-  popupImageCap.textContent = event.target.alt; // изменить на cardItemTitle.textContent
+function opencardImagePopup(cardImage, cardTitle) {
+  const popupImage = document.querySelector(".popup_type_image");
+  const popupImagePic = popupImage.querySelector(".popup__image");
+  const popupImageCap = popupImage.querySelector(".popup__caption");
+  cardImage.addEventListener('click', function (event) {
+    openPopup(popupImage);
+    popupImagePic.src = event.target.src;
+    popupImagePic.alt = event.target.alt;
+    popupImageCap.textContent = cardTitle.textContent;
+  });
 }
 
-export {getCard, deleteCard, likeCard, openPopupImage};
+export { getCard, deleteCard, likeCard, opencardImagePopup };
