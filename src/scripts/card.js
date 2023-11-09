@@ -27,13 +27,13 @@ function getCard(
 
   cardItemImage.src = cardInfo.link;
   cardItemTitle.textContent = cardInfo.name;
-  cardItemImage.alt = cardInfo.alt;
+  cardItemImage.alt = cardInfo.name;
 
   removeButton.addEventListener("click", deleteCard);
 
   likeButton.addEventListener("click", likeCard);
 
-  openCardImagePopup(cardItemImage, cardItemTitle);
+  cardItemImage.addEventListener("click", openCardImagePopup);
 
   return cardItem;
 }

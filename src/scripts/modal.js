@@ -6,9 +6,8 @@ function closePopupByEsc(event) {
 }
 
 function closePopupByOverlay(event) {
-  const openedPopup = document.querySelector(".popup_is-opened");
   if (event.target.classList.contains("popup_is-opened")) {
-    closePopup(openedPopup);
+    closePopup(event.target);
   }
 }
 
@@ -24,4 +23,4 @@ function closePopup(popupElement) {
   popupElement.removeEventListener("click", closePopupByOverlay);
 }
 
-export { openPopup, closePopup, closePopupByEsc, closePopupByOverlay };
+export { openPopup, closePopup };
