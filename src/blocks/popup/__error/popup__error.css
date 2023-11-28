@@ -1,0 +1,13 @@
+.popup__error {
+  color: #f00;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.2;
+  opacity: 0;
+}
+
+.popup__error_visible {
+  opacity: 1;
+}

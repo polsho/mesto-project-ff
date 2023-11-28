@@ -1,6 +1,7 @@
 import { initialCards } from "./scripts/initialCards.js";
 import { getCard, deleteCard, likeCard } from "./scripts/card.js";
 import { openPopup, closePopup } from "./scripts/modal.js";
+import { enableValidation } from "./scripts/validation.js"
 import "./pages/index.css";
 
 const cardList = document.querySelector(".places__list");
@@ -27,6 +28,15 @@ const cardTemplateConfig = {
   removeButtonSelector: ".card__delete-button",
   likeButtonSelector: ".card__like-button",
 };
+
+const formConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+}
 
 const closePopupButtons = document.querySelectorAll(".popup__close");
 
@@ -101,3 +111,6 @@ popups.forEach(function (popup) {
 
 newProfileForm.addEventListener("submit", editProfile);
 newCardForm.addEventListener("submit", addNewCard);
+
+enableValidation(formConfig);
+
