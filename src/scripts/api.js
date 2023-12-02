@@ -35,13 +35,10 @@ export const getUserData = () => {
   });
 };
 
-export const patchProfile = (profileData) => {
+export const editUserData = (profileData) => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: 'PATCH',
-    headers: {
-      authorization: 'b3d60fc6-1639-4f5f-9902-e15faf6075dd',
-      'Content-Type': 'application/json'
-    },
+    headers: config.headers,
     body: JSON.stringify({
       name: profileData.title.textContent,
       about: profileData.description.textContent,
@@ -52,19 +49,58 @@ export const patchProfile = (profileData) => {
 export const postCard = (cardData) => {
   return fetch(`${config.baseUrl}/cards`, {
     method: 'POST',
-    headers: {
-      authorization: 'b3d60fc6-1639-4f5f-9902-e15faf6075dd',
-      'Content-Type': 'application/json'
-    },
+    headers: config.headers,
     body: JSON.stringify({
       name: cardData.name,
       link: cardData.link,
     })
+  })
+  .then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+  })
+  .catch((err) => {
+    console.log(err); 
   });
 }
 
 export const deleteElement = (id) => {
   fetch(`${config.baseUrl}/cards/${id}`, {
-      method: 'DELETE'
-    })
+      method: 'DELETE',
+      headers: config.headers
+  })
+}
+
+export const addCardLike = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: 'PUT',
+    headers: config.headers
+  })
+  .then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+  })
+  .catch((err) => {
+    console.log(err); 
+  });
+}
+
+export const removeCardLike = (id) => {
+  return fetch(`${config.baseUrl}/cards/likes/${id}`, {
+      method: 'DELETE',
+      headers: config.headers
+  })
+  .then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+  })
+  .catch((err) => {
+    console.log(err); 
+  });
 }

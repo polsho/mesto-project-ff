@@ -1,4 +1,4 @@
-import { deleteElement } from "./scripts/api.js";
+import { deleteElement, addCardLike, removeCardLike } from "./api.js";
 
 function getCard(
   cardInfo,
@@ -35,29 +35,44 @@ function getCard(
     removeButton.style.display = 'none';
   }
 
+  cardItem.id = cardInfo._id;
   cardItemImage.src = cardInfo.link;
   cardItemTitle.textContent = cardInfo.name;
   cardItemImage.alt = cardInfo.name;
   likesQty.textContent = cardInfo.likes.length;
 
-  removeButton.addEventListener("click", deleteCard);
+  removeButton.addEventListener("click", (event) => {
+    deleteElement(cardInfo._id);
+    event.target.closest(".card").remove();
+  });
 
-  likeButton.addEventListener("click", likeCard);
+  likeButton.addEventListener("click", (event) => {
+    event.target.classList.toggle("card__like-button_is-active");
+    if(event.target.classList.contains("card__like-button_is-active")) {
+      addCardLike(cardItem.id)
+      .then((card) => {
+        likesQty.textContent = card.likes.length;
+      });
+    } else {
+      removeCardLike(cardItem.id).then((card) => {
+        likesQty.textContent = card.likes.length;
+      });
+    }
+  });
 
   cardItemImage.addEventListener("click", openCardImagePopup);
 
   return cardItem;
 }
 
+const likeCard = () => {
+
+}
+
 function deleteCard(event) {
-  event.preventDefault();
-
   deleteElement(cardInfo._id);
-  // event.target.closest(".card").remove();
+  event.target.closest(".card").remove();
 }
 
-function likeCard(event) {
-  event.target.classList.toggle("card__like-button_is-active");
-}
 
 export { getCard, deleteCard, likeCard };

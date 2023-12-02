@@ -1,7 +1,7 @@
 import { getCard, deleteCard, likeCard } from "./scripts/card.js";
 import { openPopup, closePopup } from "./scripts/modal.js";
 import { enableValidation, clearValidation } from "./scripts/validation.js";
-import { getData, getUserData, patchProfile, postCard } from "./scripts/api.js";
+import { getData, getUserData, editUserData, postCard } from "./scripts/api.js";
 import "./pages/index.css";
 
 const cardList = document.querySelector(".places__list");
@@ -58,18 +58,20 @@ function addNewCard(event) {
     alt: newCardName.value,
   };
 
-  postCard(newCard);
-
-  cardList.prepend(
-    getCard(
-      newCard,
-      deleteCard,
-      likeCard,
-      openCardImagePopup,
-      profileData,
-      cardTemplateConfig
-    )
-  );
+  postCard(newCard)
+    .then((cardInfo => {
+      cardList.prepend(
+        getCard(
+          cardInfo,
+          deleteCard,
+          likeCard,
+          openCardImagePopup,
+          profileData,
+          cardTemplateConfig
+        )
+      );
+    }));
+  
   newCardForm.reset();
   clearValidation(newCardForm, formConfig);
   closePopup(newCardPopup);
@@ -85,7 +87,7 @@ function editProfile(event) {
     ".popup__input_type_description"
   ).value;
 
-  patchProfile(profileData);
+  editUserData(profileData);
   closePopup(newProfilePopup);
 }
 
@@ -143,3 +145,5 @@ popups.forEach(function (popup) {
 
 newProfileForm.addEventListener("submit", editProfile);
 newCardForm.addEventListener("submit", addNewCard);
+
+
