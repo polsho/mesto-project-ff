@@ -1,8 +1,11 @@
+import { deleteElement } from "./scripts/api.js";
+
 function getCard(
   cardInfo,
   deleteCard,
   likeCard,
   openCardImagePopup,
+  profileData,
   cardTemplateConfig
 ) {
   const cardTemplate = document.querySelector(
@@ -24,10 +27,18 @@ function getCard(
   const likeButton = cardItem.querySelector(
     cardTemplateConfig.likeButtonSelector
   );
+  const likesQty = cardItem.querySelector(
+    cardTemplateConfig.likesQtySelector
+  );
+
+  if (cardInfo.owner._id != profileData.id) {
+    removeButton.style.display = 'none';
+  }
 
   cardItemImage.src = cardInfo.link;
   cardItemTitle.textContent = cardInfo.name;
   cardItemImage.alt = cardInfo.name;
+  likesQty.textContent = cardInfo.likes.length;
 
   removeButton.addEventListener("click", deleteCard);
 
@@ -39,7 +50,10 @@ function getCard(
 }
 
 function deleteCard(event) {
-  event.target.closest(".card").remove();
+  event.preventDefault();
+
+  deleteElement(cardInfo._id);
+  // event.target.closest(".card").remove();
 }
 
 function likeCard(event) {

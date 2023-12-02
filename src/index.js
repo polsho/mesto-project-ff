@@ -1,7 +1,7 @@
-import { initialCards } from "./scripts/initialCards.js";
 import { getCard, deleteCard, likeCard } from "./scripts/card.js";
 import { openPopup, closePopup } from "./scripts/modal.js";
 import { enableValidation, clearValidation } from "./scripts/validation.js";
+import { getData, getUserData, patchProfile, postCard } from "./scripts/api.js";
 import "./pages/index.css";
 
 const cardList = document.querySelector(".places__list");
@@ -13,12 +13,16 @@ const newCardForm = newCardPopup.querySelector(".popup__form");
 const editProfileButton = document.querySelector(".profile__edit-button");
 const newProfilePopup = document.querySelector(".popup_type_edit");
 const newProfileForm = newProfilePopup.querySelector(".popup__form");
-const profileTitle = document.querySelector(".profile__title");
-const profileDescription = document.querySelector(".profile__description");
 
 const popupImage = document.querySelector(".popup_type_image");
 const popupImagePic = popupImage.querySelector(".popup__image");
 const popupImageCap = popupImage.querySelector(".popup__caption");
+
+const profileData = {
+  title: document.querySelector(".profile__title"),
+  description: document.querySelector(".profile__description"),
+  image: document.querySelector(".profile__image"),
+};
 
 const cardTemplateConfig = {
   cardTemplateSelector: "#card-template",
@@ -27,6 +31,7 @@ const cardTemplateConfig = {
   cardItemTitleSelector: ".card__title",
   removeButtonSelector: ".card__delete-button",
   likeButtonSelector: ".card__like-button",
+  likesQtySelector: ".card__likes-qty"
 };
 
 const formConfig = {
@@ -44,6 +49,7 @@ const popups = document.querySelectorAll(".popup");
 
 function addNewCard(event) {
   event.preventDefault();
+
   const newCardName = newCardForm.querySelector(".popup__input_type_card-name");
   const newCardSource = newCardForm.querySelector(".popup__input_type_url");
   const newCard = {
@@ -51,12 +57,16 @@ function addNewCard(event) {
     link: newCardSource.value,
     alt: newCardName.value,
   };
+
+  postCard(newCard);
+
   cardList.prepend(
     getCard(
       newCard,
       deleteCard,
       likeCard,
       openCardImagePopup,
+      profileData,
       cardTemplateConfig
     )
   );
@@ -68,12 +78,14 @@ function addNewCard(event) {
 function editProfile(event) {
   event.preventDefault();
 
-  profileTitle.textContent = newProfileForm.querySelector(
+  profileData.title.textContent = newProfileForm.querySelector(
     ".popup__input_type_name"
   ).value;
-  profileDescription.textContent = newProfileForm.querySelector(
+  profileData.description.textContent = newProfileForm.querySelector(
     ".popup__input_type_description"
   ).value;
+
+  patchProfile(profileData);
   closePopup(newProfilePopup);
 }
 
@@ -84,19 +96,37 @@ function openCardImagePopup(event) {
   popupImageCap.textContent = event.target.alt;
 }
 
-initialCards.forEach(function (card) {
-  cardList.append(
-    getCard(card, deleteCard, likeCard, openCardImagePopup, cardTemplateConfig)
-  );
+getUserData().then((userData) => {
+  profileData.title.textContent = userData.name;
+  profileData.description.textContent = userData.about;
+  profileData.image.style.backgroundImage = userData.avatar;
+  profileData.id = userData._id;
 });
+
+Promise.all([getData("users"), getData("cards")]).then(([users, cards]) => {
+  cards.forEach((card) => {
+    cardList.append(
+      getCard(
+        card,
+        deleteCard,
+        likeCard,
+        openCardImagePopup,
+        profileData,
+        cardTemplateConfig
+      )
+    );
+  });
+});
+
+enableValidation(formConfig);
 
 editProfileButton.addEventListener("click", function () {
   openPopup(newProfilePopup);
-  clearValidation(newProfilePopup, formConfig);
   newProfileForm.querySelector(".popup__input_type_name").value =
-    profileTitle.textContent;
+    profileData.title.textContent;
   newProfileForm.querySelector(".popup__input_type_description").value =
-    profileDescription.textContent;
+    profileData.description.textContent;
+  clearValidation(newProfilePopup, formConfig);
 });
 
 newCardButton.addEventListener("click", () => openPopup(newCardPopup));
@@ -113,5 +143,3 @@ popups.forEach(function (popup) {
 
 newProfileForm.addEventListener("submit", editProfile);
 newCardForm.addEventListener("submit", addNewCard);
-
-enableValidation(formConfig);
