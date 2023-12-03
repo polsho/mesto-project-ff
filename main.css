@@ -648,17 +648,27 @@ template {
 }
 
 .profile__image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 120px;
   height: 120px;
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
-  background-image: url(images/avatar.6666407ac3aa5af1d5de.jpg);
   background-size: cover;
   /*Ковер тут симпатичнее контейна*/
   background-position: center;
   margin: 0 29px 0 0;
   /*Макет очень кривоват, как считать этот отступ я хз. Проявите тут лояльность пока что*/
+}
+
+.profile__image:hover {
+  opacity: 0.6;
+}
+
+.profile__image:hover .profile__image-edit {
+  display: block;
 }
 
 @media screen and (max-width: 740px) {
@@ -673,8 +683,15 @@ template {
   }
 }
 
+.profile__image-edit {
+  display: none;
+  inline-size: 47px;
+  block-size: 47px;
+  background: transparent url(images/Vector.93c771f5f8582261951d.png) center no-repeat;
+}
+
 .profile {
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: "Inter", Arial, sans-serif;
   color: #fff;
   display: flex;
   align-items: center;
@@ -757,6 +774,16 @@ template {
 
 .card__like-button_is-active {
   background: transparent url(images/like-active.a7ffe37dcb927ba0c46c.svg) no-repeat;
+}
+
+.card__likes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.2;
 }
 
 .card__delete-button {
@@ -891,11 +918,15 @@ template {
   line-height: 18px;
   box-sizing: border-box;
   padding: 10px 0 0;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .popup__input:last-of-type {
   margin-bottom: 0;
+}
+
+.popup__input:focus-visible {
+  outline-offset: 1px;
 }
 
 @media screen and (max-width: 568px) {
@@ -903,6 +934,24 @@ template {
     font-size: 12px;
     line-height: 15px;
   }
+}
+
+.popup__input_type_error {
+  border-bottom: 1px solid #f00;
+}
+
+.popup__error {
+  color: #f00;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.2;
+  opacity: 0;
+}
+
+.popup__error_visible {
+  opacity: 1;
 }
 
 .popup__button {
@@ -924,6 +973,17 @@ template {
 .popup__button:hover {
   background: rgba(0, 0, 0, 0.8);
   cursor: pointer;
+}
+
+.popup__button_disabled {
+  background: #fff;
+  border: 1px solid #c4c4c4;
+  color: #c4c4c4;
+}
+
+.popup__button_disabled:hover {
+  background: #fff;
+  cursor: default;
 }
 
 @media screen and (max-width: 568px) {
