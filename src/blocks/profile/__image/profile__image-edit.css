@@ -1,3 +1,6 @@
 .profile__image-edit {
-    
+  display: none;
+  inline-size: 47px;
+  block-size: 47px;
+  background: transparent url("../../../images/Vector.png") center no-repeat;
 }

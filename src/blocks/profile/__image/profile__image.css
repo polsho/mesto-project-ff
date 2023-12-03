@@ -1,10 +1,12 @@
 .profile__image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 120px;
   height: 120px;
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
-  background-image: url('../../../images/avatar.jpg');
   background-size: cover;
   /*Ковер тут симпатичнее контейна*/
   background-position: center;
@@ -13,7 +15,11 @@
 }
 
 .profile__image:hover {
-  
+  opacity: 0.6;
+}
+
+.profile__image:hover .profile__image-edit {
+  display: block;
 }
 
 @media screen and (max-width: 740px) {
