@@ -33,7 +33,7 @@ export function getCard(
 
   cardInfo.likes.forEach((like) => {
     if (like._id === profileData.id) {
-      likeButton.classList.add("card__like-button_is-active");
+      likeButton.classList.add(cardTemplateConfig.activeLikeButtonClass);
     }
   });
 
@@ -49,8 +49,8 @@ export function getCard(
   });
 
   likeButton.addEventListener("click", (event) => {
-    event.target.classList.toggle("card__like-button_is-active");
-    if (event.target.classList.contains("card__like-button_is-active")) {
+    event.target.classList.toggle(cardTemplateConfig.activeLikeButtonClass);
+    if (event.target.classList.contains(cardTemplateConfig.activeLikeButtonClass)) {
       addCardLike(cardItem.id).then((card) => {
         likesQty.textContent = card.likes.length;
       });

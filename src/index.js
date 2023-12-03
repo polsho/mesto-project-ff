@@ -41,6 +41,7 @@ const cardTemplateConfig = {
   removeButtonSelector: ".card__delete-button",
   likeButtonSelector: ".card__like-button",
   likesQtySelector: ".card__likes-qty",
+  activeLikeButtonClass: "card__like-button_is-active"
 };
 
 const formConfig = {
@@ -121,7 +122,7 @@ function openCardImagePopup(event) {
   popupImageCap.textContent = event.target.alt;
 }
 
-getUserData().then((userData) => {
+getData("users/me").then((userData) => {
   profileData.title.textContent = userData.name;
   profileData.description.textContent = userData.about;
   profileData.image.style.backgroundImage = `url(${userData.avatar})`;
