@@ -6,19 +6,20 @@ const config = {
   },
 };
 
+const getResponseData = (res) => {
+  if(!res.ok) {
+    return Promise.reject(`Ошибка: ${res.status}`);
+  }
+  return res.json();
+}
+
 export const getData = (url) => {
   return fetch(`${config.baseUrl}/${url}`, {
     headers: config.headers,
   })
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
+      return getResponseData(res);
     })
-    .catch((err) => {
-      console.log(err);
-    });
 };
 
 export const editUserData = (profileData) => {
@@ -42,13 +43,7 @@ export const postCard = (cardData) => {
     }),
   })
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .catch((err) => {
-      console.log(err);
+      return getResponseData(res);
     });
 };
 
@@ -65,13 +60,7 @@ export const addCardLike = (cardId) => {
     headers: config.headers,
   })
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .catch((err) => {
-      console.log(err);
+      return getResponseData(res);
     });
 };
 
@@ -81,13 +70,7 @@ export const removeCardLike = (id) => {
     headers: config.headers,
   })
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .catch((err) => {
-      console.log(err);
+      return getResponseData(res);
     });
 };
 
@@ -100,12 +83,6 @@ export const editImage = (newAvatarSource) => {
     }),
   })
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .catch((err) => {
-      console.log(err);
+      return getResponseData(res);
     });
 };

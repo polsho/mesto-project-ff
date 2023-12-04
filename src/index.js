@@ -3,7 +3,6 @@ import { openPopup, closePopup } from "./scripts/modal.js";
 import { enableValidation, clearValidation } from "./scripts/validation.js";
 import {
   getData,
-  getUserData,
   editUserData,
   postCard,
   editImage,
@@ -79,18 +78,25 @@ function addNewCard(event) {
     alt: newCardName.value,
   };
 
-  postCard(newCard).then((cardInfo) => {
-    cardList.prepend(
-      getCard(cardInfo, openCardImagePopup, profileData, cardTemplateConfig)
-    );
-  });
+  postCard(newCard)
+    .then((cardInfo) => {
+      cardList.prepend(
+        getCard(cardInfo, openCardImagePopup, profileData, cardTemplateConfig)
+      )
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      renderLoading(
+        false,
+        newCardForm.querySelector(formConfig.submitButtonSelector)
+      );
+    });
+  
 
   newCardForm.reset();
   clearValidation(newCardForm, formConfig);
-  renderLoading(
-    false,
-    newCardForm.querySelector(formConfig.submitButtonSelector)
-  );
   closePopup(newCardPopup);
 }
 
