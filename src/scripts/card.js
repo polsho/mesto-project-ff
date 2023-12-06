@@ -61,7 +61,9 @@ export function getCard(
     }
   });
 
-  cardItemImage.addEventListener("click", openCardImagePopup);
+  cardItemImage.addEventListener("click", () => {
+    openCardImagePopup(cardInfo.name, cardInfo.link)
+  });
 
   return cardItem;
 }

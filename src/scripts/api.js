@@ -22,14 +22,17 @@ export const getData = (url) => {
     })
 };
 
-export const editUserData = (profileData) => {
+export const editUserData = (profileName, profileAbout) => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: "PATCH",
     headers: config.headers,
     body: JSON.stringify({
-      name: profileData.title.textContent,
-      about: profileData.description.textContent,
+      name: profileName,
+      about: profileAbout,
     }),
+  })
+  .then((res) => {
+    return getResponseData(res);
   });
 };
 
