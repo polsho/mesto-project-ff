@@ -13,7 +13,7 @@ const getResponseData = (res) => {
   return res.json();
 };
 
-export const getData = (url) => {
+const getData = (url) => {
   return fetch(`${config.baseUrl}/${url}`, {
     headers: config.headers,
   }).then((res) => {
@@ -21,31 +21,25 @@ export const getData = (url) => {
   });
 };
 
-export const editUserData = (profileName, profileAbout) => {
-  return fetch(`${config.baseUrl}/users/me`, {
-    method: "PATCH",
-    headers: config.headers,
-    body: JSON.stringify({
-      name: profileName,
-      about: profileAbout,
-    }),
-  }).then((res) => {
-    return getResponseData(res);
-  });
-};
-
-export const postCard = (cardData) => {
-  return fetch(`${config.baseUrl}/cards`, {
+const postData = (url, obj) => {
+  return fetch(`${config.baseUrl}/${url}`, {
     method: "POST",
     headers: config.headers,
-    body: JSON.stringify({
-      name: cardData.name,
-      link: cardData.link,
-    }),
+    body: JSON.stringify(obj),
   }).then((res) => {
     return getResponseData(res);
   });
-};
+}
+
+const editElement = (url, obj) => {
+  return fetch(`${config.baseUrl}/${url}`, {
+    method: "PATCH",
+    headers: config.headers,
+    body: JSON.stringify(obj),
+  }).then((res) => {
+    return getResponseData(res);
+  });
+}
 
 export const deleteElement = (url, id) => {
   return fetch(`${config.baseUrl}/${url}/${id}`, {
@@ -56,8 +50,8 @@ export const deleteElement = (url, id) => {
   });
 };
 
-export const addElement = (url, cardId) => {
-  return fetch(`${config.baseUrl}/${url}/${cardId}`, {
+export const addElement = (url, id) => {
+  return fetch(`${config.baseUrl}/${url}/${id}`, {
     method: "PUT",
     headers: config.headers,
   }).then((res) => {
@@ -65,14 +59,13 @@ export const addElement = (url, cardId) => {
   });
 };
 
-export const editImage = (newAvatarSource) => {
-  return fetch(`${config.baseUrl}/users/me/avatar`, {
-    method: "PATCH",
-    headers: config.headers,
-    body: JSON.stringify({
-      avatar: newAvatarSource.value,
-    }),
-  }).then((res) => {
-    return getResponseData(res);
-  });
-};
+export const mestoApi = {
+  getUserData: () => getData("users/me"),
+  getCardsList: () => getData("cards"),
+  addNewCard: (cardData) => postData("cards", {name: cardData.name, link: cardData.link}),
+  deleteCard: (cardId) => deleteElement("cards", cardId),
+  editUserData: (profileName, profileAbout) => editElement("users/me", {name: profileName, about: profileAbout}),
+  editProfileAvatar: (newAvatarSource) => editElement("users/me/avatar", {avatar: newAvatarSource.value}),
+  addCardLike: (cardId) => addElement("cards/likes", cardId),
+  removeCardLike: (cardId) => deleteElement("cards/likes", cardId)
+}

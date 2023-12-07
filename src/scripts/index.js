@@ -1,7 +1,7 @@
 import { getCard, likeCard, deleteCard } from "./card.js";
 import { openPopup, closePopup } from "./modal.js";
 import { enableValidation, clearValidation } from "./validation.js";
-import { getData, editUserData, postCard, editImage } from "./api.js";
+import { mestoApi } from "./api.js";
 import "../pages/index.css";
 
 const cardList = document.querySelector(".places__list");
@@ -72,8 +72,13 @@ function renderLoading(isLoading, formButton) {
   }
 }
 
-Promise.all([getData("users/me"), getData("cards")])
+Promise.all([mestoApi.getUserData(), mestoApi.getCardsList()])
   .then(([userData, cards]) => {
+    profileData.title.textContent = userData.name;
+    profileData.description.textContent = userData.about;
+    profileData.image.style.backgroundImage = `url(${userData.avatar})`;
+    profileData.id = userData._id;
+
     cards.forEach((card) => {
       cardList.append(
         getCard(
@@ -86,11 +91,6 @@ Promise.all([getData("users/me"), getData("cards")])
         )
       );
     });
-
-    profileData.title.textContent = userData.name;
-    profileData.description.textContent = userData.about;
-    profileData.image.style.backgroundImage = `url(${userData.avatar})`;
-    profileData.id = userData._id;
   })
   .catch((err) => {
     console.log(`Ошибка.....: ${err}`);
@@ -105,7 +105,7 @@ function addNewCard(event) {
     alt: newCardName.value,
   };
 
-  postCard(newCard)
+  mestoApi.addNewCard(newCard)
     .then((cardInfo) => {
       cardList.prepend(
         getCard(
@@ -138,7 +138,7 @@ function editProfile(event) {
     ".popup__input_type_description"
   ).value;
 
-  editUserData(name, about)
+  mestoApi.editUserData(name, about)
     .then((userData) => {
       profileData.title.textContent = userData.name;
       profileData.description.textContent = userData.about;
@@ -156,7 +156,7 @@ function editAvatarImage(event) {
   event.preventDefault();
   renderLoading(true, avatarSaveButton);
 
-  editImage(newAvatarSource)
+  mestoApi.editProfileAvatar(newAvatarSource)
     .then((data) => {
       editAvatar.style.backgroundImage = `url(${data.avatar})`;
       editAvatarForm.reset();

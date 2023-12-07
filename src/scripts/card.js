@@ -1,4 +1,4 @@
-import { deleteElement, addElement } from "./api.js";
+import { mestoApi } from "./api.js";
 
 export function getCard(
   cardInfo,
@@ -67,7 +67,7 @@ export function likeCard(
   { activeLikeButtonClass }
 ) {
   if (!likeButton.classList.contains(activeLikeButtonClass)) {
-    addElement("cards/likes", cardId)
+    mestoApi.addCardLike(cardId)
       .then((card) => {
         likesQty.textContent = card.likes.length;
         likeButton.classList.add(activeLikeButtonClass);
@@ -76,7 +76,7 @@ export function likeCard(
         console.log(`Ошибка.....: ${err}`);
       });
   } else {
-    deleteElement("cards/likes", cardId)
+    mestoApi.removeCardLike(cardId)
       .then((card) => {
         likesQty.textContent = card.likes.length;
         likeButton.classList.remove(activeLikeButtonClass);
@@ -88,7 +88,7 @@ export function likeCard(
 }
 
 export function deleteCard(cardItem, cardId) {
-  deleteElement("cards", cardId)
+  mestoApi.deleteCard(cardId)
     .then(() => {
       cardItem.remove();
     })
