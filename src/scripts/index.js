@@ -1,8 +1,8 @@
-import { getCard, likeCard, deleteCard } from "./scripts/card.js";
-import { openPopup, closePopup } from "./scripts/modal.js";
-import { enableValidation, clearValidation } from "./scripts/validation.js";
-import { getData, editUserData, postCard, editImage } from "./scripts/api.js";
-import "./pages/index.css";
+import { getCard, likeCard, deleteCard } from "./card.js";
+import { openPopup, closePopup } from "./modal.js";
+import { enableValidation, clearValidation } from "./validation.js";
+import { getData, editUserData, postCard, editImage } from "./api.js";
+import "../pages/index.css";
 
 const cardList = document.querySelector(".places__list");
 
