@@ -7,19 +7,18 @@ const config = {
 };
 
 const getResponseData = (res) => {
-  if(!res.ok) {
+  if (!res.ok) {
     return Promise.reject(`Ошибка: ${res.status}`);
   }
   return res.json();
-}
+};
 
 export const getData = (url) => {
   return fetch(`${config.baseUrl}/${url}`, {
     headers: config.headers,
-  })
-    .then((res) => {
-      return getResponseData(res);
-    })
+  }).then((res) => {
+    return getResponseData(res);
+  });
 };
 
 export const editUserData = (profileName, profileAbout) => {
@@ -30,8 +29,7 @@ export const editUserData = (profileName, profileAbout) => {
       name: profileName,
       about: profileAbout,
     }),
-  })
-  .then((res) => {
+  }).then((res) => {
     return getResponseData(res);
   });
 };
@@ -44,37 +42,27 @@ export const postCard = (cardData) => {
       name: cardData.name,
       link: cardData.link,
     }),
-  })
-    .then((res) => {
-      return getResponseData(res);
-    });
-};
-
-export const deleteElement = (id) => {
-  fetch(`${config.baseUrl}/cards/${id}`, {
-    method: "DELETE",
-    headers: config.headers,
+  }).then((res) => {
+    return getResponseData(res);
   });
 };
 
-export const addCardLike = (cardId) => {
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: "PUT",
-    headers: config.headers,
-  })
-    .then((res) => {
-      return getResponseData(res);
-    });
-};
-
-export const removeCardLike = (id) => {
-  return fetch(`${config.baseUrl}/cards/likes/${id}`, {
+export const deleteElement = (url, id) => {
+  return fetch(`${config.baseUrl}/${url}/${id}`, {
     method: "DELETE",
     headers: config.headers,
-  })
-    .then((res) => {
-      return getResponseData(res);
-    });
+  }).then((res) => {
+    return getResponseData(res);
+  });
+};
+
+export const addElement = (url, cardId) => {
+  return fetch(`${config.baseUrl}/${url}/${cardId}`, {
+    method: "PUT",
+    headers: config.headers,
+  }).then((res) => {
+    return getResponseData(res);
+  });
 };
 
 export const editImage = (newAvatarSource) => {
@@ -84,8 +72,7 @@ export const editImage = (newAvatarSource) => {
     body: JSON.stringify({
       avatar: newAvatarSource.value,
     }),
-  })
-    .then((res) => {
-      return getResponseData(res);
-    });
+  }).then((res) => {
+    return getResponseData(res);
+  });
 };

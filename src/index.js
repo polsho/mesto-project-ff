@@ -1,4 +1,4 @@
-import { getCard } from "./scripts/card.js";
+import { getCard, likeCard, deleteCard } from "./scripts/card.js";
 import { openPopup, closePopup } from "./scripts/modal.js";
 import { enableValidation, clearValidation } from "./scripts/validation.js";
 import { getData, editUserData, postCard, editImage } from "./scripts/api.js";
@@ -72,6 +72,30 @@ function renderLoading(isLoading, formButton) {
   }
 }
 
+Promise.all([getData("users/me"), getData("cards")])
+  .then(([userData, cards]) => {
+    cards.forEach((card) => {
+      cardList.append(
+        getCard(
+          card,
+          likeCard,
+          deleteCard,
+          openCardImagePopup,
+          profileData,
+          cardTemplateConfig
+        )
+      );
+    });
+
+    profileData.title.textContent = userData.name;
+    profileData.description.textContent = userData.about;
+    profileData.image.style.backgroundImage = `url(${userData.avatar})`;
+    profileData.id = userData._id;
+  })
+  .catch((err) => {
+    console.log(`Ошибка.....: ${err}`);
+  });
+
 function addNewCard(event) {
   event.preventDefault();
   renderLoading(true, newCardSaveButton);
@@ -84,7 +108,14 @@ function addNewCard(event) {
   postCard(newCard)
     .then((cardInfo) => {
       cardList.prepend(
-        getCard(cardInfo, openCardImagePopup, profileData, cardTemplateConfig)
+        getCard(
+          cardInfo,
+          likeCard,
+          deleteCard,
+          openCardImagePopup,
+          profileData,
+          cardTemplateConfig
+        )
       );
       newCardForm.reset();
       clearValidation(newCardForm, formConfig);
@@ -121,32 +152,6 @@ function editProfile(event) {
     });
 }
 
-function openCardImagePopup(imageName, imageSrc) {
-  openPopup(popupImage);
-  popupImagePic.src = imageSrc;
-  popupImagePic.alt = imageName;
-  popupImageCap.textContent = imageName;
-}
-
-getData("users/me").then((userData) => {
-  profileData.title.textContent = userData.name;
-  profileData.description.textContent = userData.about;
-  profileData.image.style.backgroundImage = `url(${userData.avatar})`;
-  profileData.id = userData._id;
-});
-
-Promise.all([getData("users"), getData("cards")])
-  .then(([users, cards]) => {
-    cards.forEach((card) => {
-      cardList.append(
-        getCard(card, openCardImagePopup, profileData, cardTemplateConfig)
-      );
-    });
-  })
-  .catch((err) => {
-    console.log(`Ошибка.....: ${err}`);
-  });
-
 function editAvatarImage(event) {
   event.preventDefault();
   renderLoading(true, avatarSaveButton);
@@ -163,6 +168,13 @@ function editAvatarImage(event) {
     .finally(() => {
       renderLoading(false, avatarSaveButton);
     });
+}
+
+function openCardImagePopup(imageName, imageSrc) {
+  openPopup(popupImage);
+  popupImagePic.src = imageSrc;
+  popupImagePic.alt = imageName;
+  popupImageCap.textContent = imageName;
 }
 
 enableValidation(formConfig);

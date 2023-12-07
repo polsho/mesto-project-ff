@@ -1,7 +1,9 @@
-import { deleteElement, addCardLike, removeCardLike } from "./api.js";
+import { deleteElement, addElement } from "./api.js";
 
 export function getCard(
   cardInfo,
+  likeCard,
+  deleteCard,
   openCardImagePopup,
   profileData,
   cardTemplateConfig
@@ -43,27 +45,54 @@ export function getCard(
   cardItemImage.alt = cardInfo.name;
   likesQty.textContent = cardInfo.likes.length;
 
-  removeButton.addEventListener("click", (event) => {
-    deleteElement(cardInfo._id);
-    event.target.closest(".card").remove();
+  removeButton.addEventListener("click", () => {
+    deleteCard(cardItem, cardInfo._id);
   });
 
-  likeButton.addEventListener("click", (event) => {
-    event.target.classList.toggle(cardTemplateConfig.activeLikeButtonClass);
-    if (event.target.classList.contains(cardTemplateConfig.activeLikeButtonClass)) {
-      addCardLike(cardItem.id).then((card) => {
-        likesQty.textContent = card.likes.length;
-      });
-    } else {
-      removeCardLike(cardItem.id).then((card) => {
-        likesQty.textContent = card.likes.length;
-      });
-    }
+  likeButton.addEventListener("click", () => {
+    likeCard(likeButton, likesQty, cardItem.id, cardTemplateConfig);
   });
 
   cardItemImage.addEventListener("click", () => {
-    openCardImagePopup(cardInfo.name, cardInfo.link)
+    openCardImagePopup(cardInfo.name, cardInfo.link);
   });
 
   return cardItem;
+}
+
+export function likeCard(
+  likeButton,
+  likesQty,
+  cardId,
+  { activeLikeButtonClass }
+) {
+  if (!likeButton.classList.contains(activeLikeButtonClass)) {
+    addElement("cards/likes", cardId)
+      .then((card) => {
+        likesQty.textContent = card.likes.length;
+        likeButton.classList.add(activeLikeButtonClass);
+      })
+      .catch((err) => {
+        console.log(`Ошибка.....: ${err}`);
+      });
+  } else {
+    deleteElement("cards/likes", cardId)
+      .then((card) => {
+        likesQty.textContent = card.likes.length;
+        likeButton.classList.remove(activeLikeButtonClass);
+      })
+      .catch((err) => {
+        console.log(`Ошибка.....: ${err}`);
+      });
+  }
+}
+
+export function deleteCard(cardItem, cardId) {
+  deleteElement("cards", cardId)
+    .then(() => {
+      cardItem.remove();
+    })
+    .catch((err) => {
+      console.log(`Ошибка.....: ${err}`);
+    });
 }
