@@ -41,7 +41,7 @@ const editElement = (url, obj) => {
   });
 }
 
-export const deleteElement = (url, id) => {
+const deleteElement = (url, id) => {
   return fetch(`${config.baseUrl}/${url}/${id}`, {
     method: "DELETE",
     headers: config.headers,
@@ -50,7 +50,7 @@ export const deleteElement = (url, id) => {
   });
 };
 
-export const addElement = (url, id) => {
+const addElement = (url, id) => {
   return fetch(`${config.baseUrl}/${url}/${id}`, {
     method: "PUT",
     headers: config.headers,
