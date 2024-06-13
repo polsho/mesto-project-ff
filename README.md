@@ -1,4 +1,3 @@
-https://github.com/polsho/mesto-project-ff
-https://polsho.github.io/mesto-project-ff/
-# Проектная работа Mesto
+# Сервис для размещения фотографий (Проектная работа Mesto)
 
+В рамках данного учебного проекта освоены сборка проекта на Webpack, модули JS, обработка событий, работа с формами
